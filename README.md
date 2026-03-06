@@ -1,3 +1,6 @@
+## 
+
+```
 ┌─────────────────────────────────────────────────────────┐
 │                   Document Input                        │
 │          (PDF native / PDF scanned / Image)             │
@@ -25,3 +28,4 @@
             │  local model server │
             │  OpenAI-compatible  │
             └─────────────────────┘
+```
