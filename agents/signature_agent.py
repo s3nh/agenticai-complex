@@ -8,6 +8,12 @@ from tools.document_loader import DocumentLoader
 logger = logging.getLogger(__name__)
 loader = DocumentLoader(tesseract_cmd=config.TESSERACT_CMD)
 
+# Confidence calculation constants for signature detection
+_BASE_CONFIDENCE = 0.5
+_KEYWORD_BOOST = 0.1
+_IMAGE_BOOST = 0.2
+_MAX_CONFIDENCE = 0.95
+
 def check_signature(file_path: str) -> dict:
     """
     Checks whether a document contains a signature.
@@ -32,7 +38,12 @@ def check_signature(file_path: str) -> dict:
         has_image_sig = len(images_b64) > 0 and doc.get("is_scanned", False)
 
         if keyword_hits or has_image_sig:
-            confidence = min(0.5 + 0.1 * len(keyword_hits) + (0.2 if has_image_sig else 0), 0.95)
+            confidence = min(
+                _BASE_CONFIDENCE
+                + _KEYWORD_BOOST * len(keyword_hits)
+                + (_IMAGE_BOOST if has_image_sig else 0),
+                _MAX_CONFIDENCE,
+            )
             return {
                 "signed": True,
                 "confidence": round(confidence, 2),

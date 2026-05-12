@@ -3,6 +3,11 @@
 Shared in-process memory store for passing state between agents within a session.
 Agents can write structured outputs here so downstream agents can read them
 without requiring the orchestrator to pass data manually in every prompt.
+
+NOTE: This is a single-process, single-session store. It is designed for use
+within one document analysis task at a time. Call memory_clear() at the start
+of each new task to avoid state leaking between sessions. It is NOT suitable
+for concurrent multi-session deployments without adding per-session namespacing.
 """
 import threading
 from typing import Any, Optional
